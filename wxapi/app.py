@@ -1,21 +1,20 @@
 import requests
 import hashlib
 from .utils import to_bytes, make_sha1_hash
-from .config import WxUrl
+from .urls import WXUrl
 import logging
 
 
 logger = logging.getLogger(__name__)
 
 
-class WxClient(object):
+class WXApi(object):
 
     def __init__(self, app_id, secret):
         """ 初始化
         """
         self.app_id = app_id
         self.secret = secret
-        self.wx_url = WxUrl()
     
     def configure_wx_server(
         self, token, signature,
@@ -39,7 +38,7 @@ class WxClient(object):
             'secret': self.secret,
         }
         try:
-            req = requests.get(self.wx_url.TOKEN_URL, params=payloads)
+            req = requests.get(WXUrl.TOKEN_URL, params=payloads)
             if req.status_code == 200:
                 return req.json()
         except Exception as e:
